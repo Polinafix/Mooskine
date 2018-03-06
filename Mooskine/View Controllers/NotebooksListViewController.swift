@@ -116,8 +116,12 @@ class NotebooksListViewController: UIViewController, UITableViewDataSource {
 
         // Configure cell
         cell.nameLabel.text = aNotebook.name
-        let pageString = aNotebook.notes.count == 1 ? "page" : "pages"
-        cell.pageCountLabel.text = "\(aNotebook.notes.count) \(pageString)"
+        if let count = aNotebook.notes?.count {
+             let pageString = count == 1 ? "page" : "pages"
+             cell.pageCountLabel.text = "\(count) \(pageString)"
+        }
+       
+       
 
         return cell
     }
