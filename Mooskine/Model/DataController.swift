@@ -12,14 +12,16 @@ import CoreData
 class DataController {
     //1.hold a persistant container instance
     let persistentContainer:NSPersistentContainer
+    //4.convenience property to access the context
+    var viewContext:NSManagedObjectContext {
+        return persistentContainer.viewContext
+    }
     
     init(modelName:String) {
         //2.instantiate it
         persistentContainer = NSPersistentContainer(name: modelName)
-        //4.convenience property to access the context
-        var viewContext:NSManagedObjectContext {
-            return persistentContainer.viewContext
-        }
+        
+        
     }
     //3.Load the persistant store
     func load(completion:(() -> Void)? = nil){

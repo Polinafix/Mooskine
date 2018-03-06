@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class NotebooksListViewController: UIViewController, UITableViewDataSource {
     /// A table view that displays a list of notebooks
@@ -14,12 +15,26 @@ class NotebooksListViewController: UIViewController, UITableViewDataSource {
 
     /// The `Notebook` objects being presented
     var notebooks: [Notebook] = []
+    //need to populate this array with a data from Persistent Store
+    //11.reference the dataController
+    var dataController:DataController!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.titleView = UIImageView(image: #imageLiteral(resourceName: "toolbar-cow"))
         navigationItem.rightBarButtonItem = editButtonItem
         updateEditButtonState()
+       //13.2
+        let fetchRequest:NSFetchRequest<Notebook> = Notebook.fetchRequest()
+        //13.3 configure it > sort by date
+        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        //13.4 ask the context to execute the request:
+        if let result = try? dataController.viewContext.fetch(fetchRequest) {
+            //if the request was succcessful > store them in the array
+            notebooks = result
+            tableView.reloadData()
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -74,8 +89,9 @@ class NotebooksListViewController: UIViewController, UITableViewDataSource {
 
     /// Adds a new notebook to the end of the `notebooks` array
     func addNotebook(name: String) {
-        let notebook = Notebook(name: name)
-        notebooks.append(notebook)
+        //TODO: add a notebook
+        //let notebook = Notebook(name: name)
+        //notebooks.append(notebook)
         tableView.insertRows(at: [IndexPath(row: numberOfNotebooks - 1, section: 0)], with: .fade)
         updateEditButtonState()
     }

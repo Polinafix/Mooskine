@@ -12,16 +12,22 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    //1. instantiate the DataController
+    //9. instantiate the DataController
     let dataController = DataController(modelName: "Mooskine")
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        //2.load store
+        //10.load store
         dataController.load()
         //{ the completion block we provide here will get called once the persistent store is loaded, this gives us the option to display a loading interface while we wait for data to load and switch to the main UI only after the data has loaded }
+        
+        //12.inject the DataController dependency into NotebooksListViewController
+        let navigationController = window?.rootViewController as! UINavigationController
+        let notebooksListViewController = navigationController.topViewController as! NotebooksListViewController
+        notebooksListViewController.dataController = dataController
+        
         
         return true
     }
