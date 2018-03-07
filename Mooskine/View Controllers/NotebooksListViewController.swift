@@ -24,6 +24,7 @@ class NotebooksListViewController: UIViewController, UITableViewDataSource {
         navigationItem.titleView = UIImageView(image: #imageLiteral(resourceName: "toolbar-cow"))
         navigationItem.rightBarButtonItem = editButtonItem
         updateEditButtonState()
+        
        //13.2
         let fetchRequest:NSFetchRequest<Notebook> = Notebook.fetchRequest()
         //13.3 configure it > sort by date
@@ -90,14 +91,27 @@ class NotebooksListViewController: UIViewController, UITableViewDataSource {
     /// Adds a new notebook to the end of the `notebooks` array
     func addNotebook(name: String) {
         //TODO: add a notebook
-        //let notebook = Notebook(name: name)
-        //notebooks.append(notebook)
-        tableView.insertRows(at: [IndexPath(row: numberOfNotebooks - 1, section: 0)], with: .fade)
+        //14.1) create a new Notebook associates with the context
+        let notebook = Notebook(context: dataController.viewContext)
+        notebook.name = name
+        notebook.creationDate = Date()
+        //14.2) ask the context to save the notebook to the persistent store
+        try? dataController.viewContext.save()
+        
+        notebooks.insert(notebook, at: 0)
+        
+        tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .fade)
         updateEditButtonState()
     }
 
     /// Deletes the notebook at the specified index path
     func deleteNotebook(at indexPath: IndexPath) {
+        //15.1 get a reference to the notebook to delete
+        let notebookToDelete = notebook(at: indexPath)
+        //15.2 call the context's delete function passing in that notebook
+        dataController.viewContext.delete(notebookToDelete)
+        //15.3 try saving the change to the persistent store
+        try? dataController.viewContext.save()
         notebooks.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .fade)
         if numberOfNotebooks == 0 {
@@ -165,6 +179,7 @@ class NotebooksListViewController: UIViewController, UITableViewDataSource {
         if let vc = segue.destination as? NotesListViewController {
             if let indexPath = tableView.indexPathForSelectedRow {
                 vc.notebook = notebook(at: indexPath)
+                vc.dataController = dataController
             }
         }
     }
