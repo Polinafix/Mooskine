@@ -31,7 +31,28 @@ class DataController {
                 fatalError(error!.localizedDescription)
             }
             //we may want to pass in a function to get called after loading the store
+            //call the auto-saving function > initial autosave
+            self.autoSaveViewContext()
             completion?()
+        }
+    }
+}
+
+extension DataController {
+    //16.2
+    func autoSaveViewContext(interval:TimeInterval = 30) {
+        print("autosaving")
+        guard interval > 0 else {
+            print("cannot set negative autosave interval")
+            return
+        }
+        //check if there are changes that need to be saved
+        if viewContext.hasChanges {
+            try? viewContext.save()
+        }
+        //call the function again after the specified interval has elapsed
+        DispatchQueue.main.asyncAfter(deadline: .now() + interval) {
+            self.autoSaveViewContext(interval: interval)
         }
     }
 }
