@@ -13,29 +13,38 @@ class NotebooksListViewController: UIViewController, UITableViewDataSource {
     /// A table view that displays a list of notebooks
     @IBOutlet weak var tableView: UITableView!
 
-    /// The `Notebook` objects being presented
-    var notebooks: [Notebook] = []
-    //need to populate this array with a data from Persistent Store
+  
     //11.reference the dataController
     var dataController:DataController!
+    //18.
+    var fetchedResultsController:NSFetchedResultsController<Notebook>!
 
+    
+    fileprivate func setUpFetchedResultsController() {
+        //18.1 instantiate it with the following fetch request
+        //describe a data that we want through a fetch request
+        let fetchRequest:NSFetchRequest<Notebook> = Notebook.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        
+        //19.1
+        fetchedResultsController.delegate = self
+        //load data and start tracking
+        do {
+            try fetchedResultsController.performFetch()
+        }catch {
+            fatalError("Fetch could not be performed: \(error.localizedDescription)")
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.titleView = UIImageView(image: #imageLiteral(resourceName: "toolbar-cow"))
         navigationItem.rightBarButtonItem = editButtonItem
-        updateEditButtonState()
-        
-       //13.2
-        let fetchRequest:NSFetchRequest<Notebook> = Notebook.fetchRequest()
-        //13.3 configure it > sort by date
-        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
-        fetchRequest.sortDescriptors = [sortDescriptor]
-        //13.4 ask the context to execute the request:
-        if let result = try? dataController.viewContext.fetch(fetchRequest) {
-            //if the request was succcessful > store them in the array
-            notebooks = result
-            tableView.reloadData()
-        }
+        setUpFetchedResultsController()
+
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -45,6 +54,12 @@ class NotebooksListViewController: UIViewController, UITableViewDataSource {
             tableView.deselectRow(at: indexPath, animated: false)
             tableView.reloadRows(at: [indexPath], with: .fade)
         }
+    }
+    
+    //18.2 tear it down when the view disappears
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(true)
+        fetchedResultsController = nil
     }
 
     // -------------------------------------------------------------------------
@@ -90,38 +105,32 @@ class NotebooksListViewController: UIViewController, UITableViewDataSource {
 
     /// Adds a new notebook to the end of the `notebooks` array
     func addNotebook(name: String) {
-        //TODO: add a notebook
-        //14.1) create a new Notebook associates with the context
+        //14.1) create a new Notebook associated with the context
         let notebook = Notebook(context: dataController.viewContext)
         notebook.name = name
         notebook.creationDate = Date()
         //14.2) ask the context to save the notebook to the persistent store
         try? dataController.viewContext.save()
         
-        notebooks.insert(notebook, at: 0)
-        
-        tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .fade)
-        updateEditButtonState()
     }
+    
+  
 
     /// Deletes the notebook at the specified index path
     func deleteNotebook(at indexPath: IndexPath) {
         //15.1 get a reference to the notebook to delete
-        let notebookToDelete = notebook(at: indexPath)
+        let notebookToDelete = fetchedResultsController.object(at: indexPath)
         //15.2 call the context's delete function passing in that notebook
         dataController.viewContext.delete(notebookToDelete)
         //15.3 try saving the change to the persistent store
         try? dataController.viewContext.save()
-        notebooks.remove(at: indexPath.row)
-        tableView.deleteRows(at: [indexPath], with: .fade)
-        if numberOfNotebooks == 0 {
-            setEditing(false, animated: true)
-        }
-        updateEditButtonState()
     }
 
     func updateEditButtonState() {
-        navigationItem.rightBarButtonItem?.isEnabled = numberOfNotebooks > 0
+        if let sections = fetchedResultsController.sections {
+            navigationItem.rightBarButtonItem?.isEnabled = sections[0].numberOfObjects > 0
+        }
+        
     }
 
     override func setEditing(_ editing: Bool, animated: Bool) {
@@ -131,17 +140,17 @@ class NotebooksListViewController: UIViewController, UITableViewDataSource {
 
     // -------------------------------------------------------------------------
     // MARK: - Table view data source
-
+    //21.1
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return fetchedResultsController.sections?.count ?? 1
     }
-
+    //21.2
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return numberOfNotebooks
+        return fetchedResultsController.sections?[section].numberOfObjects ?? 0
     }
-
+    //21.3
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let aNotebook = notebook(at: indexPath)
+        let aNotebook = fetchedResultsController.object(at: indexPath)
         let cell = tableView.dequeueReusableCell(withIdentifier: NotebookCell.defaultReuseIdentifier, for: indexPath) as! NotebookCell
 
         // Configure cell
@@ -150,8 +159,6 @@ class NotebooksListViewController: UIViewController, UITableViewDataSource {
              let pageString = count == 1 ? "page" : "pages"
              cell.pageCountLabel.text = "\(count) \(pageString)"
         }
-       
-       
 
         return cell
     }
@@ -163,14 +170,6 @@ class NotebooksListViewController: UIViewController, UITableViewDataSource {
         }
     }
 
-    // Helper
-
-    var numberOfNotebooks: Int { return notebooks.count }
-
-    func notebook(at indexPath: IndexPath) -> Notebook {
-        return notebooks[indexPath.row]
-    }
-
     // -------------------------------------------------------------------------
     // MARK: - Navigation
 
@@ -178,9 +177,38 @@ class NotebooksListViewController: UIViewController, UITableViewDataSource {
         // If this is a NotesListViewController, we'll configure its `Notebook`
         if let vc = segue.destination as? NotesListViewController {
             if let indexPath = tableView.indexPathForSelectedRow {
-                vc.notebook = notebook(at: indexPath)
+                vc.notebook = fetchedResultsController.object(at: indexPath)
                 vc.dataController = dataController
             }
         }
+    }
+}
+
+//MARK: 22)Update the TableView when the data changes
+extension NotebooksListViewController: NSFetchedResultsControllerDelegate {
+    
+    //when the fetched object has been changed
+    //tableview should update the effected rows
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+        case .insert:
+            //newIndexPathParameter contains the index Path of the row to insert
+            tableView.insertRows(at: [newIndexPath!], with: .fade)
+            break
+        case .delete:
+            //indexPath contains the index path of teh row to delete
+            tableView.deleteRows(at: [indexPath!], with: .fade)
+            break
+        default:
+            break
+        }
+    }
+    
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.beginUpdates()
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.endUpdates()
     }
 }
