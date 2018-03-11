@@ -114,7 +114,6 @@ class NotebooksListViewController: UIViewController, UITableViewDataSource {
         
     }
     
-  
 
     /// Deletes the notebook at the specified index path
     func deleteNotebook(at indexPath: IndexPath) {
@@ -187,6 +186,11 @@ class NotebooksListViewController: UIViewController, UITableViewDataSource {
 //MARK: 22)Update the TableView when the data changes
 extension NotebooksListViewController: NSFetchedResultsControllerDelegate {
     
+    //help inform the table view that changes are about to happen
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.beginUpdates()
+    }
+    
     //when the fetched object has been changed
     //tableview should update the effected rows
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
@@ -199,15 +203,17 @@ extension NotebooksListViewController: NSFetchedResultsControllerDelegate {
             //indexPath contains the index path of teh row to delete
             tableView.deleteRows(at: [indexPath!], with: .fade)
             break
+            
+//        case .update:
+//            tableView.reloadRows(at: [indexPath!], with: .fade)
+//        case .move:
+//            tableView.moveRow(at: indexPath!, to: newIndexPath!)
         default:
             break
         }
     }
     
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.beginUpdates()
-    }
-    
+    /// help inform the table view that changes just finished happening.
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.endUpdates()
     }
