@@ -25,6 +25,8 @@
 		E097ADED204F00E700CEA550 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E097ADEC204F00E700CEA550 /* DataController.swift */; };
 		E0B2E75E2051B9C100B70882 /* Notebook+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B2E75D2051B9C100B70882 /* Notebook+Extensions.swift */; };
 		E0B2E7602051BABF00B70882 /* Note+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B2E75F2051BABF00B70882 /* Note+Extensions.swift */; };
+		E0B2E763205DC0C500B70882 /* UpdateToAttributedStrings.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = E0B2E762205DC0C500B70882 /* UpdateToAttributedStrings.xcmappingmodel */; };
+		E0B2E765205DC1A500B70882 /* UpdateToAttributedStringsPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B2E764205DC1A500B70882 /* UpdateToAttributedStringsPolicy.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +62,9 @@
 		E097ADEC204F00E700CEA550 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 		E0B2E75D2051B9C100B70882 /* Notebook+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notebook+Extensions.swift"; sourceTree = "<group>"; };
 		E0B2E75F2051BABF00B70882 /* Note+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Note+Extensions.swift"; sourceTree = "<group>"; };
+		E0B2E761205DBC1900B70882 /* Mooskine-2-attributedstring.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Mooskine-2-attributedstring.xcdatamodel"; sourceTree = "<group>"; };
+		E0B2E762205DC0C500B70882 /* UpdateToAttributedStrings.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = UpdateToAttributedStrings.xcmappingmodel; sourceTree = "<group>"; };
+		E0B2E764205DC1A500B70882 /* UpdateToAttributedStringsPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateToAttributedStringsPolicy.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +151,8 @@
 			children = (
 				E0B2E75C2051B99200B70882 /* Managed Object Extensions */,
 				E097ADE9204DC64900CEA550 /* Mooskine.xcdatamodeld */,
+				E0B2E764205DC1A500B70882 /* UpdateToAttributedStringsPolicy.swift */,
+				E0B2E762205DC0C500B70882 /* UpdateToAttributedStrings.xcmappingmodel */,
 				E097ADEC204F00E700CEA550 /* DataController.swift */,
 			);
 			path = Model;
@@ -308,12 +315,14 @@
 			files = (
 				E0B2E75E2051B9C100B70882 /* Notebook+Extensions.swift in Sources */,
 				039B105C1EDC5469002EA94F /* AppDelegate.swift in Sources */,
+				E0B2E763205DC0C500B70882 /* UpdateToAttributedStrings.xcmappingmodel in Sources */,
 				03B2699E1F2F8AAA00C7433C /* NotebookCell.swift in Sources */,
 				E097ADEB204DC64900CEA550 /* Mooskine.xcdatamodeld in Sources */,
 				03B2699B1F2F8AA100C7433C /* NotebooksListViewController.swift in Sources */,
 				E097ADED204F00E700CEA550 /* DataController.swift in Sources */,
 				E0B2E7602051BABF00B70882 /* Note+Extensions.swift in Sources */,
 				03B2699C1F2F8AA100C7433C /* NoteDetailsViewController.swift in Sources */,
+				E0B2E765205DC1A500B70882 /* UpdateToAttributedStringsPolicy.swift in Sources */,
 				03B269A01F2F8AAD00C7433C /* Cell.swift in Sources */,
 				03B2699D1F2F8AA100C7433C /* NotesListViewController.swift in Sources */,
 				03B2699F1F2F8AAA00C7433C /* NoteCell.swift in Sources */,
@@ -563,9 +572,10 @@
 		E097ADE9204DC64900CEA550 /* Mooskine.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				E0B2E761205DBC1900B70882 /* Mooskine-2-attributedstring.xcdatamodel */,
 				E097ADEA204DC64900CEA550 /* Mooskine.xcdatamodel */,
 			);
-			currentVersion = E097ADEA204DC64900CEA550 /* Mooskine.xcdatamodel */;
+			currentVersion = E0B2E761205DBC1900B70882 /* Mooskine-2-attributedstring.xcdatamodel */;
 			path = Mooskine.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
