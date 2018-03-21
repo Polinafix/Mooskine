@@ -27,6 +27,7 @@
 		E0B2E7602051BABF00B70882 /* Note+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B2E75F2051BABF00B70882 /* Note+Extensions.swift */; };
 		E0B2E763205DC0C500B70882 /* UpdateToAttributedStrings.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = E0B2E762205DC0C500B70882 /* UpdateToAttributedStrings.xcmappingmodel */; };
 		E0B2E765205DC1A500B70882 /* UpdateToAttributedStringsPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B2E764205DC1A500B70882 /* UpdateToAttributedStringsPolicy.swift */; };
+		E0C3333E2062B5F8002AB85B /* Pathifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C3333D2062B5F8002AB85B /* Pathifier.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,7 @@
 		E0B2E761205DBC1900B70882 /* Mooskine-2-attributedstring.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Mooskine-2-attributedstring.xcdatamodel"; sourceTree = "<group>"; };
 		E0B2E762205DC0C500B70882 /* UpdateToAttributedStrings.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = UpdateToAttributedStrings.xcmappingmodel; sourceTree = "<group>"; };
 		E0B2E764205DC1A500B70882 /* UpdateToAttributedStringsPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateToAttributedStringsPolicy.swift; sourceTree = "<group>"; };
+		E0C3333D2062B5F8002AB85B /* Pathifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pathifier.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +156,7 @@
 				E0B2E764205DC1A500B70882 /* UpdateToAttributedStringsPolicy.swift */,
 				E0B2E762205DC0C500B70882 /* UpdateToAttributedStrings.xcmappingmodel */,
 				E097ADEC204F00E700CEA550 /* DataController.swift */,
+				E0C3333D2062B5F8002AB85B /* Pathifier.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -321,6 +324,7 @@
 				03B2699B1F2F8AA100C7433C /* NotebooksListViewController.swift in Sources */,
 				E097ADED204F00E700CEA550 /* DataController.swift in Sources */,
 				E0B2E7602051BABF00B70882 /* Note+Extensions.swift in Sources */,
+				E0C3333E2062B5F8002AB85B /* Pathifier.swift in Sources */,
 				03B2699C1F2F8AA100C7433C /* NoteDetailsViewController.swift in Sources */,
 				E0B2E765205DC1A500B70882 /* UpdateToAttributedStringsPolicy.swift in Sources */,
 				03B269A01F2F8AAD00C7433C /* Cell.swift in Sources */,
